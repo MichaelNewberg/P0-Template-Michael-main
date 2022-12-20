@@ -14,7 +14,16 @@ import java.util.Scanner;
 import io.javalin.http.Context;
 
 public class SliMetrics {
-    public static void getSLI(Context ctx) throws FileNotFoundException{
+    public static void getSLI(Context ctx) throws FileNotFoundException, IOException{
+        ProcessBuilder pb = new ProcessBuilder();
+        pb.directory(new File ("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs"));
+        pb.command("cmd.exe", "/c", "C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/sli-test.sh");
+        Process process = pb.start();
+        BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String s = null;
+        while ((s=input.readLine()) != null) {
+            System.out.println(s);
+        }
         File latencyFile = new File("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/Latency.log");
         Scanner sc = new Scanner(latencyFile);
         double totalLatency = 0;
@@ -38,20 +47,7 @@ public class SliMetrics {
         double avgLatency = (double) Math.round((totalLatency*100.0/totalRequest))/100;
         double httpSuccess = totalRequest - requestFailure;
     ctx.result("HTTP request success rate is: " + ((httpSuccess / totalRequest)*100) + "%, and the average latency for each request is: " + avgLatency + "ms.");
-    }
-    public static void main(String[] args) throws IOException {
-        ProcessBuilder pb = new ProcessBuilder();
-        pb.directory(new File ("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs"));
-        pb.command("cmd.exe", "/c", "C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/sli-test.sh");
-        Process process = pb.start();
-        BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String s = null;
-        while ((s=input.readLine()) != null) {
-            System.out.println(s);
-        }
-
-        System.out.println("End of Script.");
-    }   
+    } 
 }
 
 

@@ -51,7 +51,7 @@ public class PlanetDao {
 			planet.setOwnerId(rs.getInt(3));
 			return planet;
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Planet not found.");
 			return new Planet();
 		}
 	}

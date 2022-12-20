@@ -31,6 +31,7 @@ public class MoonService {
 	}
 
 	public void deleteMoonById(int moonId) {
+		this.dao.deleteMoonById(moonId);
 	}
 
 	public List<Moon> getMoonsFromPlanet(int planetId) throws SQLException {
