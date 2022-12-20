@@ -15,6 +15,7 @@ import io.javalin.http.Context;
 
 public class SliMetrics {
     public static void getSLI(Context ctx) throws FileNotFoundException, IOException{
+        //Runs bash script
         ProcessBuilder pb = new ProcessBuilder();
         pb.directory(new File ("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs"));
         pb.command("cmd.exe", "/c", "C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/sli-test.sh");
@@ -24,6 +25,7 @@ public class SliMetrics {
         while ((s=input.readLine()) != null) {
             System.out.println(s);
         }
+        //reads Latency.log created by script
         File latencyFile = new File("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/Latency.log");
         Scanner sc = new Scanner(latencyFile);
         double totalLatency = 0;
@@ -31,6 +33,7 @@ public class SliMetrics {
             double x = Double.parseDouble(sc.nextLine());//x is just a holder variable for each new line read
             totalLatency += x;  
         }
+        //reads httpRequest.log created by script
         File requestFile = new File("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/httpRequest.log");
         Scanner scan = new Scanner(requestFile);
         int totalRequest = 0;
@@ -44,7 +47,9 @@ public class SliMetrics {
         }
         scan.close();
         sc.close();
+        //calculates avg. latency
         double avgLatency = (double) Math.round((totalLatency*100.0/totalRequest))/100;
+        //calculates success rate of http requests
         double httpSuccess = totalRequest - requestFailure;
     ctx.result("HTTP request success rate is: " + ((httpSuccess / totalRequest)*100) + "%, and the average latency for each request is: " + avgLatency + "ms.");
     } 

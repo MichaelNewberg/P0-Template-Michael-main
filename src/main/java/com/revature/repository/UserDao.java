@@ -65,31 +65,4 @@ public class UserDao {
             return new User();//better to return an empty User with no info than a null
         }  
     }
-
-    // public User getSLI(){
-    //     File latencyFile = new File("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/Latency.log");
-    //     Scanner sc = new Scanner(latencyFile);
-    //     double data = 0;
-    //     while (sc.hasNext()){
-    //         double x = Double.parseDouble(sc.nextLine());
-    //         //System.out.println(sc.nextLine());
-    //         data += x;  
-    //     }
-    //     sc.close();
-    // //     //return "HTTP request success rate is: " + variable + "%, and the average latency for each request is: " + variable2 "ms.";
-    // }
-
-    // public static void main(String[] args) throws FileNotFoundException {
-    //     File requestFile = new File("C:/Users/Michael/Desktop/P0-Template-Michael-main/logs/httpRequest.log");
-    //     Scanner sc = new Scanner(requestFile);
-    //     int latencyTotal = 0;
-    //     while (sc.hasNext()){
-    //         int y = Integer.parseInt(sc.nextLine());
-    //         System.out.println(sc.nextLine());
-    //         latencyTotal += y;
-            
-    //     }
-    //     sc.close();
-    //    System.out.println(latencyTotal);
-    // }
 }
