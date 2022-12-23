@@ -1,27 +1,21 @@
 package com.revature.controller;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.service.UserService;
 
 import io.javalin.http.Context;
+import jakarta.servlet.http.HttpSession;
 
+@RestController
 public class AuthenticateController {
-	
-	private UserService userService = new UserService();
-
-	public void authenticate(Context ctx) {
-		
-		UsernamePasswordAuthentication loginRequest = ctx.bodyAsClass(UsernamePasswordAuthentication.class);
-		
-		User u = userService.getUserByUsername(loginRequest.getUsername());
-	
-		if (u != null && u.getPassword().equals(loginRequest.getPassword())) {
-			ctx.sessionAttribute("user", u);
-			ctx.status(200);
-		} else {
-			ctx.status(400);
-		}
+	@PostMapping("/login")
+	public String login(HttpSession session) {
+		session.setAttribute("user", "password");
+		return "Logged in successfully.";
 	}
 
 	public void register(Context ctx) {

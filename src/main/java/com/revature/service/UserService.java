@@ -1,23 +1,65 @@
 package com.revature.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.revature.exceptions.EntityNotFound;
 import com.revature.models.User;
-import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.repository.UserDao;
 
+@Service
 public class UserService {
+	@Autowired
+	private UserDao userDao;
 
-	private UserDao dao;
-
-	public UserService(){
-		this.dao = new UserDao();
+	public List<User> getAllUsers(){
+		List<User> users = this.userDao.findAll();
+		if (users.size() != 0) {
+			return users;
+		} else {
+			throw new EntityNotFound("No users found in the database.");
+		}
+	}
+	
+	public User getUserById(int id){
+		Optional<User> possibleUser = this.userDao.findById(id);
+		if (possibleUser.isPresent()) {
+			return possibleUser.get();
+		} else {
+			throw new EntityNotFound("User not found.");
+		}
 	}
 
 	public User getUserByUsername(String username) {
-		//return data grabbed by dao object. Interpretation is handled elsewhere.
-		return this.dao.getUserByUsername(username);
+		Optional<User> possibleUser = this.userDao.findByUserName(username);
+		if (possibleUser.isPresent()) {
+			return possibleUser.get();
+		} else {
+			throw new EntityNotFound("User not found.");
+		}
 	}
 
-	public User register(UsernamePasswordAuthentication registerRequest) {
-		return this.dao.createUser(registerRequest);
+
+	public String createUser(User user){
+		this.userDao.createUser(user.getUsername(), user.getPassword());
+		return "User created.";
 	}
+
+	public String updateUser(User user){
+		int rowCount = this.userDao.updateUser(user.getUsername(), user.getPassword());
+		if (rowCount == 1) {
+			return "User information updated successfully";
+		} else {
+			throw new EntityNotFound("Could not update user information.");
+		}
+	}
+
+	public String deleteUserById(int id){
+		this.userDao.deleteById(id);
+		return "User with given id has been deleted.";
+	}
+	
 }

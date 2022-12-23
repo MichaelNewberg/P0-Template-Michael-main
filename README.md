@@ -1,6 +1,8 @@
 # Planetarium
 
-The Planetarium is a web service that allows users to add planets and associated moons to a central database to map the night sky. Users must register an account to participate, and those who do will be able to associate themselves with the planets and moons they add to the database. Much of the infrastructure has already been created: it is your job to finish writing the implementation code for this application, and to add logging/metric aggregation as well. 
+The Planetarium is a web service that allows users to add planets and associated moons to a central database to map the night sky. Users must register an account to participate, and those who do will be able to associate themselves with the planets and moons they add to the database. In the previous Sprint, you implemented the repository and service layer of the application, implemented logging, and created a bash script solution to measure the SLIs of the application.
+
+In this sprint you will be converting this application into a Spring Boot application and adding on new observability tools in order to prepare for monitoring more SLIs. You will also be using Docker to containerize the application and the associated monitoring tools for ease of deployment. This is a critical step that must be completed before the main goal for this application can be achieved: deployment to Kubernetes.
 
 ## Key Terminology
 - **Project**
@@ -15,22 +17,28 @@ The Planetarium is a web service that allows users to add planets and associated
     - a phrase used to describe a project that has the minimum number of features and functionality applied to make the sprint considered successful
 
 ## Development Requirements
-Each class in the list below has one or more unimplemented methods you will need to complete to achieve MVP requirements:
-- Utilities Package
-    - ConnectionUtil
-- Repository Package
-    - UserDao
-    - PlanetDao
-    - MoonDao
-- Services
-    - UserService
-    - PlanetService
-    - MoonService
+The application currently utilizes Javalin and JDBC: you will be converting the app to use Spring Boot with the **Spring Data**, **Spring Web**, and **Spring Actuator** modules.
+- All repository, service, and API layer features must be recreated in Spring Boot
+    - your application should connect to the same database you used from P0
+    - you will NOT need a ConnectionUtil class for P1
+- After converting the project over to Spring Boot, you will need to containerize the project and save the image on Docker Hub
+    - any updates to the project/image need to be saved to Docker Hub
 
-**NOTE: you can create a main method in each class to test the methods as you work on them, then delete it when you're done with the class**
+- After containerizing the application you will need to implement/add the following technologies to your application deployment via a docker compose file:
+    - Micrometer
+    - Promtail
+    - Loki
+    - Prometheus
+    - Grafana
+-
 
 ## SRE Requirements
-This is the core of the project: the application as it stands currently has no logging or metric aggregation. It is your job to implement SLF4j and Logback to capture relevant events and their associated data in real time. You will also need to create a script OUTSIDE of the project to aggregate the data to measure your SLIs and achieve MVP requirements. 
+In the previous Sprint you used bash to calculate your SLIs: this time around you will be making use of some new tools. The following technologies must be implemented/deployed alongside the containerized planetarium app to achieve mvp requirements:
+- Micrometer
+- Promtail
+- Loki
+- Prometheus
+- Grafana
 
 ### Service Level Objects
 - 99.8% of requests should complete successfully within 200 milliseconds
@@ -41,19 +49,21 @@ This is the core of the project: the application as it stands currently has no l
 - Error Rate
     - you should track the percentage of how many http requests return a non-500 status code
 
-**NOTE: you are free to edit the pre-provided methods to add your logging, but be careful of making sweeping changes to the code: edit, don't recreate**
-
 ### Service Level Indicator Exposure
-You will need to create one or more bash scripts that read the log file of the project and parse the relevant data
+Micrometer will expose the relevant data in your Spring application, and Prometheus will scrape the data from Micrometer. You will make use of Grafana to visualize and track your SLIs.
 
 # MVP Requirements Rundown
 - Development
-    - All unimplemented methods should be completed
+    - All repository, service, and API layer methods should be implemented in a Spring Boot application
+    - A docker image of your application should be created and saved in Docker Hub
+    - A docker compose file should be created to handle deploying your containerized application and auxilary software
 - SRE
-    - Logging should be added to the project
-    - One or more scripts should handle measuring your SLIs by reading/parsing the log file
+    - Logs generated by the Planetarium should be persisted in a volume outside of the running container
+    - Your application should expose metrics concerning http requests made and latency times via Micrometer
+    - Promtail should push your application logs to loki
+    - Prometheus should be able to scrape your SLI metrics exposed by Micrometer
+    - You should be able to view your metrics over time provided by Prometheus and your logs within Loki by utilizing Grafana
 
 # Stretch Goal
-Stretch goals are things to work on ONLY when all MVP requirements have been accomplished: listed below is an optional feature you can add to the project to enhance it further:
-- Create a way for the application to return the SLI metrics for the lifespan of the application via an http request
-    - This will require you to create your own custom classes and integrate them into the project
+Stretch goals are things to work on ONLY when all MVP requirements have been accomplished: listed below are optional features you can add to the project to enhance it further:
+    - Add Alerting by using AlertManager and Prometheus
