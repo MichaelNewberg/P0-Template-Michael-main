@@ -1,37 +1,53 @@
 package com.revature.controller;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.revature.models.User;
 import com.revature.models.UsernamePasswordAuthentication;
 import com.revature.service.UserService;
 
-import io.javalin.http.Context;
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 public class AuthenticateController {
+	@Autowired
+	private UserService userService;
+
+	//have to compare inputs to a list
 	@PostMapping("/login")
-	public String login(HttpSession session) {
-		session.setAttribute("user", "password");
-		return "Logged in successfully.";
+	public ResponseEntity<User> login(HttpSession session, @RequestBody UsernamePasswordAuthentication credentials){
+		User user = userService.getUserByUsername(credentials.getUsername());
+		if (user != null){//will return null pointer exception
+			if (user.getPassword().equals(credentials.getPassword())) {
+				session.setAttribute("user", user);
+				return new ResponseEntity<>(user, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
 	}
 
-	public void register(Context ctx) {
-		//no code to handle something going wrong, like account with username already taken. Not handling it at the moment.
-		UsernamePasswordAuthentication registerRequest = ctx.bodyAsClass(UsernamePasswordAuthentication.class);
+	@PostMapping("/logout")
+	public String logout(HttpSession session){
+        session.invalidate();
+        return "Logged out successfully.";
+    }
 
-		User newUser = userService.register(registerRequest);
-
-		ctx.json(newUser).status(201);
+	@PostMapping("/register")
+	public ResponseEntity<String> register(@RequestBody User user){
+		return new ResponseEntity<>(this.userService.createUser(user), HttpStatus.OK);
 	}
 
-	public void invalidateSession(Context ctx) {
-		ctx.req().getSession().invalidate();
+	@GetMapping("/user/{name}")
+	public ResponseEntity<User> getUserbyName(@PathVariable String name){
+		return new ResponseEntity<>(this.userService.getUserByUsername(name), HttpStatus.OK);
 	}
-	
-	public boolean verifySession(Context ctx) {	
-		return ctx.sessionAttribute("user") != null;
-	}
+	//add update user after everything is done
 }

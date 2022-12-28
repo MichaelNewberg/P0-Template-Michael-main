@@ -1,0 +1,18 @@
+server: # list ports to run on
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions: # where to store its position info in the log files so it doesnt resend logs
+  filename: /tmp/positions.yaml
+
+clients: # where to send the log information
+  - url: http://loki:3100/loki/api/v1/push # this tells promtail to send the logs to Loki
+
+scrape_configs: # in short, tells promtail where to find log files we want pushed into the client
+  - job_name: system
+    static_configs: # we choose static_configs because the logs are static
+      - targets:
+          - localhost
+        labels:
+          job: planetarium
+          __path__: /var/log/newRollingFile.log

@@ -45,8 +45,8 @@ public class PlanetService {
 		return "Planet created.";
 	}
 
-	public String updatePlanet(Planet planet){
-		int rowCount = this.planetDao.updatePlanet(planet.getName(), planet.getOwnerId(), planet.getId());
+	public String updatePlanet(String name, int ownerId){
+		int rowCount = this.planetDao.updatePlanet(name, ownerId);
 		if (rowCount == 1) {
 			return "Planet updated.";
 		} else {

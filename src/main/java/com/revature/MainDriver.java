@@ -5,29 +5,17 @@ package com.revature;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.controller.RequestMapping;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.revature.repository.MoonDao;
 
-import io.javalin.Javalin;
 
+@SpringBootApplication
 public class MainDriver {
 	static List<MoonDao> moons = new ArrayList<>();
 	public static void main(String[] args) {
-
-		Javalin app = Javalin.create(confg ->{
-			confg.plugins.enableDevLogging();
-		});
-		app.post("/moon", ctx -> {
-			//MoonDao newMoon = ctx.bodyAsClass(MoonDao.class);
-			//moons.add(Moon.createMoon());
-
-		});
-
-		app.get("/moon/{id}", ctx -> {
-			//int id = Integer.parseInt(ctx.pathParam("id"));
-			//MoonDao moon = moons.get(id); 
-		});
-		RequestMapping.setupEndpoints(app);
-		app.start(7000);
+		System.out.println("Starting application.");
+		SpringApplication.run(MainDriver.class, args);
 	}
 }

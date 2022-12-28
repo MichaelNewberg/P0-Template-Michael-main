@@ -1,6 +1,5 @@
 package com.revature.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +13,9 @@ import com.revature.repository.UserDao;
 public class UserService {
 	@Autowired
 	private UserDao userDao;
-
-	public List<User> getAllUsers(){
-		List<User> users = this.userDao.findAll();
-		if (users.size() != 0) {
-			return users;
-		} else {
-			throw new EntityNotFound("No users found in the database.");
-		}
-	}
 	
-	public User getUserById(int id){
-		Optional<User> possibleUser = this.userDao.findById(id);
-		if (possibleUser.isPresent()) {
-			return possibleUser.get();
-		} else {
-			throw new EntityNotFound("User not found.");
-		}
-	}
-
 	public User getUserByUsername(String username) {
-		Optional<User> possibleUser = this.userDao.findByUserName(username);
+		Optional<User> possibleUser = this.userDao.findByUsername(username);
 		if (possibleUser.isPresent()) {
 			return possibleUser.get();
 		} else {

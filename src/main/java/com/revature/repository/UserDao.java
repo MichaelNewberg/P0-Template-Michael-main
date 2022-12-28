@@ -10,15 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.revature.models.User;
 
 public interface UserDao extends JpaRepository<User, Integer>{
-    Optional<User> findByUserName(String username);
+    Optional<User> findByUsername(String username);
 
     @Transactional
     @Modifying 
     @Query(value= "insert into users values (default, :username , :password", nativeQuery = true)
-    void createUser(@Param("username") String userName, @Param("password") String passWord);
+    void createUser(@Param("username") String username, @Param("password") String password);
 
     @Transactional
     @Modifying 
     @Query(value= "update users set username = :username , password = :password where id = :id", nativeQuery = true)
-    int updateUser(@Param("username") String userName, @Param("password") String passWord);
+    int updateUser(@Param("username") String username, @Param("password") String password);
 }

@@ -1,5 +1,10 @@
 <configuration>
-    
+    <appender name="STOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--Encoders are how you tell Logback how to format the logs-->
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/newRollingFile.log</file>
         <append>true</append>
@@ -14,7 +19,7 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="ROLLING"/>
+        <appender-ref ref="STOUT"/>
     </root>
 
 

@@ -1,0 +1,48 @@
+# A Docker Compose must always start with the version tag.
+version: '3'
+services:
+
+  app:
+    image: michaelnewberg/p1:initial
+    container_name: planetarium
+    ports:
+      - 8080:8080
+    environment:
+      - VARIABLE=VALUE
+    volumes:
+      - ./logs/:/logs/
+
+  loki:
+    image: grafana/loki:latest # think of this as a database for your logs
+    container_name: logging-p1loki
+    ports:
+      - 3100:3100
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: logging-p1promtail
+    volumes:
+      - ./configs/promtail-config.yml:/etc/promtail/promtail-config.yml # configuration I made:config saved in container
+      - ./logs/newRollingFile.log:/var/log/newRollingFile.log # log we want to save:log in promtail
+    command: "--config.file=/etc/promtail/promtail-config.yml"
+
+  grafana:
+    image: grafana/grafana:latest # username/password: default is admin/admin
+    container_name: logging-p1grafana
+    # volumes:
+    #   - grafana-data:/var/lib/grafana
+    # persisting grafana settings
+    ports:
+      - 3000:3000
+    depends_on:
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest # think of this as your database for your metrics over time
+    ports:
+      - 9090:9090
+    volumes:
+      - ./configs/prometheus-config.yml:/etc/prometheus/prometheus-config.yml
+    container_name: logging-p1prometheus
+    command: "--config.file=/etc/prometheus/prometheus-config.yml" # need to tell Prometheus what to target
+
