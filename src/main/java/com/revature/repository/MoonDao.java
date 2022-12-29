@@ -12,16 +12,16 @@ import com.revature.models.Moon;
 
 public interface MoonDao extends JpaRepository<Moon, Integer>{
     Optional<Moon> getMoonByName(String moonName);
-	List<Moon> findAllByMyPlanetId(int myPlanetId);
+	List<Moon> findByMyPlanetId(int myPlanetId);
 
 	@Transactional
 	@Modifying
-	@Query(value= "insert into moons values (default, :name , :myPlanetId", nativeQuery = true)
+	@Query(value= "insert into moons values (default, :name , :myPlanetId)", nativeQuery = true)
 	void createMoon(@Param("name") String name, @Param("myPlanetId") int myPlanetId);
 
 	@Transactional
 	@Modifying
-	@Query(value= "update moons set name = :name , myPlanetId = :myPlanetId where id = :id", nativeQuery = true)
+	@Query(value= "update moons set name = :name , my_planet_Id = :myPlanetId where moon_id = :id", nativeQuery = true)
 	int updateMoon(@Param("name") String name, @Param("myPlanetId") int myPlanetId, @Param("id") int id);
     
 }

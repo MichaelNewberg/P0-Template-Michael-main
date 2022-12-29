@@ -27,6 +27,7 @@ public class MoonController {
 	private static Logger moonLogger = LoggerFactory.getLogger(MoonController.class);
 	@Autowired
 	private MoonService mService;
+
 	@ExceptionHandler(AuthenticationFailed.class)
     public ResponseEntity<String> authenicationFailed(AuthenticationFailed e){
         moonLogger.error(e.getLocalizedMessage(), e);
@@ -61,7 +62,7 @@ public class MoonController {
 	public ResponseEntity<Moon> getMoonById(@PathVariable int id) {
 		return new ResponseEntity<>(this.mService.getMoonById(id), HttpStatus.OK);
 	}
-	@GetMapping("/api/planet/{id}/moons")
+	@GetMapping("/api/planet/{planetId}/moons")
 	public ResponseEntity<List<Moon>> getMoonsByPlanetId(@PathVariable int planetId){
 		return new ResponseEntity<>(this.mService.getMoonsFromPlanet(planetId), HttpStatus.OK);
 	}

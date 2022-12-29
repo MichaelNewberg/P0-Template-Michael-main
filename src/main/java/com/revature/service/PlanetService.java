@@ -23,7 +23,7 @@ public class PlanetService {
 	}
 
 	public Planet getPlanetByName(String planetName) {
-		Optional<Planet> possiblePlanet = this.planetDao.getPlanetByName(planetName);
+		Optional<Planet> possiblePlanet = this.planetDao.findByName(planetName);
 		if (possiblePlanet.isPresent()) {
 			return possiblePlanet.get();
 		} else {

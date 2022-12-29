@@ -24,7 +24,7 @@ public class MoonService {
 	}
 
 	public List<Moon> getMoonsFromPlanet(int planetId){
-		List<Moon> planetMoons = this.moonDao.findAllByMyPlanetId(planetId);
+		List<Moon> planetMoons = this.moonDao.findByMyPlanetId(planetId);
 		if (planetMoons.size() != 0) {
 			return planetMoons;
 		} else {

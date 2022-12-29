@@ -67,17 +67,17 @@ public class PlanetController {
 		planetLogger.info("Get getPlanetByName called.");
 		return new ResponseEntity<>(this.pService.getPlanetByName(name), HttpStatus.OK);
 	}
-	@GetMapping("api/planet/id/{id}")
+	@GetMapping("/api/planet/id/{id}")
 	public ResponseEntity<Planet> getPlanetByID(@PathVariable int id){
 		planetLogger.info("Get getPlanetById called.");
 		return new ResponseEntity<>(this.pService.getPlanetById(id), HttpStatus.OK);
 	}
-	@PostMapping("api/planet")
+	@PostMapping("/api/planet")
 	public ResponseEntity<String> createPlanet(@RequestBody Planet planet){
 		planetLogger.info("Post createTeam() called.");
 		return new ResponseEntity<>(this.pService.createPlanet(planet), HttpStatus.CREATED);
 	}
-	@PatchMapping("api/planet")
+	@PatchMapping("/api/planet")
 	public ResponseEntity<String> updatePlanet(@RequestBody Planet planet){
 		planetLogger.info("Patch updateTeam() called.");
 		return new ResponseEntity<>(this.pService.updatePlanet(planet.getName(), planet.getOwnerId()), HttpStatus.CREATED);

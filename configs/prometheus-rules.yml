@@ -1,0 +1,12 @@
+groups:
+- name: example
+  rules:
+
+  - alert: AppDown
+    expr: up == 0     # this is prometheus pinging the application. If unable to, alert triggered
+    for: 5m        # means this alert can have a pending period of 5 minutes before triggering
+    labels:
+      severity: warn
+    annotations:
+      summary: "App is down"
+      description: "Prometheus has detected the application is not running"

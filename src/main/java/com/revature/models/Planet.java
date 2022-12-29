@@ -9,11 +9,11 @@ import javax.persistence.Table;
 @Table(name="planets")
 public class Planet {
 	@Id
-	@Column(name="id")
+	@Column(name="planet_id")
 	private int id;
 	@Column(name="name")
 	private String name;
-	@Column(name="ownerId")
+	@Column(name="owner_Id")
 	private int ownerId;
 
 	public int getId() {
