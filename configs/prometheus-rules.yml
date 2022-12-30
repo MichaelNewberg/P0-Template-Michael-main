@@ -10,3 +10,19 @@ groups:
     annotations:
       summary: "App is down"
       description: "Prometheus has detected the application is not running"
+
+  - alert: APIHighLatency:5min
+    expr: sum(rate(http_server_requests_seconds_sum{job="planetarium"}[5m]))/sum(rate(http_server_requests_seconds_count{job="planetarium"}[5m])) > 0.2 # > number for max end (200ms in this example)
+    labels:
+      severity: warn
+    annotations:
+      summary: "5min latency too high"
+      description: "Planetarium application is taking too long to handle requests in a 5 minute range"
+
+  - alert: APIHighLatency:15min
+    expr: sum(rate(http_server_requests_seconds_sum{job="planetarium"}[15m]))/sum(rate(http_server_requests_seconds_count{job="planetarium"}[15m])) > 0.2 # > number for max end (200ms in this example)
+    labels:
+      severity: warn
+    annotations:
+      summary: "15min latency too high"
+      description: "Planetarium application is taking too long to handle requests in a 15 minute range" 

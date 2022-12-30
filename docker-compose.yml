@@ -3,7 +3,7 @@ version: '3'
 services:
 
   app:
-    image: michaelnewberg/p1:1.01
+    image: michaelnewberg/p1:1.03
     container_name: planetarium
     ports:
       - 8080:8080
